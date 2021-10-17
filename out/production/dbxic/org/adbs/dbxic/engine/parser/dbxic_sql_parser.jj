@@ -706,7 +706,10 @@ Triplet<String, Pair<List<Variable>,List<Comparable>>, Proposition> ModifyTuple(
     Proposition prop = null;
 }
 {
-// TODO: your UPDATE syntanxis goes here
+    // TODO: your UPDATE syntanxis goes here
+    <UPDATE> table = Identifier()
+    <SET> v = AttrValueList()
+    <WHERE> prop = IdProposition()
 
 		{
 			return new Triplet<String, Pair<List<Variable>,List<Comparable>>, Proposition>(table, v, prop);
