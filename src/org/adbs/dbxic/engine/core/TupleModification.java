@@ -63,29 +63,53 @@ public class TupleModification extends Statement {
         } catch (IOException e) {
             throw new DBxicException("Error: Couldn't find table " + tablename + ".");
         }
+
         Pair<Integer, Attribute> lookAtt = rel.getAttributeByName(this.prop.getLeftVariable().getAttribute());
 
         TupleSlotPointer tsp = new TupleSlotPointer(null, lookAtt.first, lookAtt.second.getType());
-
+        System.out.println("Right value: " + this.prop.getRightValue() + ".  It's what we have in the 'where'.");
+        //System.out.println(this.prop.getLeftVariable().getAttribute());  // Attribute type of the where
         Comparable c = TypeCasting.createComparable(tsp.getType(), this.prop.getRightValue());
         AtomicCondition ac = new AtomicCondition(tsp, c, this.prop.getRelationship());
 
         Tuple currTuple = null;
         int pos = 0;
+        String propType = this.prop.getLeftVariable().getAttribute();
+        Comparable propVal = this.prop.getRightValue();
 
-        /////////////////////////////////////////////////////////
-        //
-        // TODO: TupleModification: YOUR CODE GOES HERE
-        // Find for the tuple which matches the condition
-        // Make the changes into all the affected attributes and
-        // persist the changes
-        //
-        /////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////
+        //                                                          //
+        // TODO: TupleModification: YOUR CODE GOES HERE             //
+        // Find for the tuple which matches the condition           //
+        // Make the changes into all the affected attributes and    //
+        // persist the changes                                      //
+        //                                                          //
+        //////////////////////////////////////////////////////////////
+
+        /*
+        Getting index of column that we want
+         */
+        Iterator<Attribute> iter = rel.iterator();
+        String attr = this.prop.getLeftVariable().getAttribute();
+        int cont = 0;
+        while (iter.hasNext()) {
+            if (attr.equals(iter.next().getName())) break;
+            cont++;
+        }
 
         // Find the right tuple. Use iterator.
+        while(iterator.hasNext()){
+            currTuple = iterator.next();
+            //List<Comparable> ah= currTuple.getValues();
 
+            // Get attributes of tuple and compare them to the where function
+
+            if (currTuple.getValue(cont).equals(propVal)) break;
+            pos++;
+        }
         // Make the changes (to all the possible modified attrs.).
         // Use rel.getAttributeByName(att_name) to find attribute instance
+        // todo Iterate for all attributes to modify, where are they stored?
 
 
         // update tuple
@@ -93,6 +117,7 @@ public class TupleModification extends Statement {
 
         // store the tuple in the same position where we found it (that is, replace it with the new version)
         // Use storageManager.
+        engine.storManager.updateTupleInPosition(rel, filename, currTuple, pos);
 
         return new MessageThroughPipe("Tuple was successfully modified into table " + tablename);
     }
