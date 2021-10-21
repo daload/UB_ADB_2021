@@ -65,10 +65,8 @@ public class TupleModification extends Statement {
         }
 
         Pair<Integer, Attribute> lookAtt = rel.getAttributeByName(this.prop.getLeftVariable().getAttribute());
-
         TupleSlotPointer tsp = new TupleSlotPointer(null, lookAtt.first, lookAtt.second.getType());
-        System.out.println("Right value: " + this.prop.getRightValue() + ".  It's what we have in the 'where'.");
-        //System.out.println(this.prop.getLeftVariable().getAttribute());  // Attribute type of the where
+
         Comparable c = TypeCasting.createComparable(tsp.getType(), this.prop.getRightValue());
         AtomicCondition ac = new AtomicCondition(tsp, c, this.prop.getRelationship());
 
@@ -86,32 +84,21 @@ public class TupleModification extends Statement {
         //                                                          //
         //////////////////////////////////////////////////////////////
 
-        /*
-        Getting index of column that we want
-         */
-        Iterator<Attribute> iter = rel.iterator();
-        String attr = this.prop.getLeftVariable().getAttribute();
-        int cont = 0;
-        while (iter.hasNext()) {
-            if (attr.equals(iter.next().getName())) break;
-            cont++;
-        }
-
         // Find the right tuple. Use iterator.
         while(iterator.hasNext()){
             currTuple = iterator.next();
             //List<Comparable> ah= currTuple.getValues();
-
             // Get attributes of tuple and compare them to the where function
-
-            if (currTuple.getValue(cont).equals(propVal)) break;
+            if (currTuple.getValue(lookAtt.first).equals(propVal)) break;
             pos++;
         }
         // Make the changes (to all the possible modified attrs.).
         // Use rel.getAttributeByName(att_name) to find attribute instance
-        // todo Iterate for all attributes to modify, where are they stored?
 
-
+        for (int i=0; i < this.values.first.size(); i++) {
+            Pair<Integer, Attribute> tmp = rel.getAttributeByName(this.values.first.get(i).getAttribute()); // Index of column
+            currTuple.setValue(tmp.first, values.second.get(i));
+        }
         // update tuple
         TypeCasting.castValuesToTypesIfNec(currTuple.getValues(), rel.getTypes());
 

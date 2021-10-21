@@ -280,11 +280,13 @@ public class StorageManager {
             boolean not_this_block = true;
             Block block = null;
             while (not_this_block) {
-                block = readBlock(relation, relFileName, respBlock);
+                block = readBlock(relation, relFileName, respBlock); // Leemos bloque
                 int actBlockSize = block.getNumberOfTuples();
-                // TODO: how to know which is the correct block to insert the tuple into?
-                // make use of all the variables defined in the context
+                if (position <= actBlockSize) break;  // Miramos si estamos dentro del bloque
+                position = position - actBlockSize;  // Acutalizamos posición global
+                respBlock++;  // Aumentamos bloque en el que estamos
             }
+            inBlockPosition--;
             block.setTuple(inBlockPosition,tuple);
             writeBlock(block);
         }
