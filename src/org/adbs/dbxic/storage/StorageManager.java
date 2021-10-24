@@ -280,13 +280,13 @@ public class StorageManager {
             boolean not_this_block = true;
             Block block = null;
             while (not_this_block) {
-                block = readBlock(relation, relFileName, respBlock); // Leemos bloque
+                block = readBlock(relation, relFileName, respBlock); // Read block
                 int actBlockSize = block.getNumberOfTuples();
-                if (position <= actBlockSize) break;  // Miramos si estamos dentro del bloque
-                position = position - actBlockSize;  // Acutalizamos posición global
-                respBlock++;  // Aumentamos bloque en el que estamos
+                if (inBlockPosition <= actBlockSize) break;  // We look if we're inside the block
+                inBlockPosition = inBlockPosition - actBlockSize;  // We update the global position
+                respBlock++;  // We increase the block where we are
             }
-            inBlockPosition--;
+            inBlockPosition--; // -1 to count for block number 0
             block.setTuple(inBlockPosition,tuple);
             writeBlock(block);
         }
