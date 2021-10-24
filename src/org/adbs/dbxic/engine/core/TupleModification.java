@@ -87,17 +87,16 @@ public class TupleModification extends Statement {
         // Find the right tuple. Use iterator.
         while(iterator.hasNext()){
             currTuple = iterator.next();
-            //List<Comparable> ah= currTuple.getValues();
-            // Get attributes of tuple and compare them to the where function
-            if (currTuple.getValue(lookAtt.first).equals(propVal)) break;
+            tsp = new TupleSlotPointer(currTuple, lookAtt.first, lookAtt.second.getType());
+            ac = new AtomicCondition(tsp, c, this.prop.getRelationship());
+            if (ac.evaluate()) break;
             pos++;
         }
         // Make the changes (to all the possible modified attrs.).
         // Use rel.getAttributeByName(att_name) to find attribute instance
 
         for (int i=0; i < this.values.first.size(); i++) {
-            Pair<Integer, Attribute> tmp = rel.getAttributeByName(this.values.first.get(i).getAttribute()); // Index of column
-            currTuple.setValue(tmp.first, values.second.get(i));
+            currTuple.setValue(rel.getAttributeByName(this.values.first.get(i).getAttribute()).first, values.second.get(i));
         }
         // update tuple
         TypeCasting.castValuesToTypesIfNec(currTuple.getValues(), rel.getTypes());

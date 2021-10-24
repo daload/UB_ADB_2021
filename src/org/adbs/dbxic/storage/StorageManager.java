@@ -286,7 +286,7 @@ public class StorageManager {
                 inBlockPosition = inBlockPosition - actBlockSize;  // We update the global position
                 respBlock++;  // We increase the block where we are
             }
-            inBlockPosition--; // -1 to count for block number 0
+            //inBlockPosition--; // -1 to count for block number 0
             block.setTuple(inBlockPosition,tuple);
             writeBlock(block);
         }
