@@ -89,9 +89,19 @@ public class TupleModification extends Statement {
             currTuple = iterator.next();
             tsp = new TupleSlotPointer(currTuple, lookAtt.first, lookAtt.second.getType());
             ac = new AtomicCondition(tsp, c, this.prop.getRelationship());
-            if (ac.evaluate()) break;
+            if (ac.evaluate()) {
+                // We put the update part in the find tuple loop so if there are more tuples that
+                // pass the proposition are modified too
+                for (int i=0; i < this.values.first.size(); i++) {
+                    currTuple.setValue(rel.getAttributeByName(this.values.first.get(i).getAttribute()).first, values.second.get(i));
+                }
+                TypeCasting.castValuesToTypesIfNec(currTuple.getValues(), rel.getTypes());
+                engine.storManager.updateTupleInPosition(rel, filename, currTuple, pos);
+            }
             pos++;
         }
+
+        /*
         // Make the changes (to all the possible modified attrs.).
         // Use rel.getAttributeByName(att_name) to find attribute instance
 
@@ -104,8 +114,8 @@ public class TupleModification extends Statement {
         // store the tuple in the same position where we found it (that is, replace it with the new version)
         // Use storageManager.
         engine.storManager.updateTupleInPosition(rel, filename, currTuple, pos);
-
-        return new MessageThroughPipe("Tuple was successfully modified into table " + tablename);
+        */
+        return new MessageThroughPipe("Tuple/s was/were successfully modified into table " + tablename);
     }
 
     /**

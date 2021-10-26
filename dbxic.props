@@ -1,6 +1,7 @@
 # DBxic's database directory
-dbxic.base.dir=C:/Users/dragr/College/ADB/dbxic/db
+# TODO change these paths
+dbxic.base.dir=C:/Universidad/ADB/dbxic/db
 # DBxic's temporary files directory
-dbxic.temp.dir=C:/Users/dragr/College/ADB/dbxic/db/tmp
+dbxic.temp.dir=C:/Universidad/ADB/dbxic/db/tmp
 # The number of blocks in the buffer
 dbxic.buffersize=50
