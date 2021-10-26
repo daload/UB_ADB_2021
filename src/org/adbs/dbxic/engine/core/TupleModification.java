@@ -72,8 +72,6 @@ public class TupleModification extends Statement {
 
         Tuple currTuple = null;
         int pos = 0;
-        String propType = this.prop.getLeftVariable().getAttribute();
-        Comparable propVal = this.prop.getRightValue();
 
         //////////////////////////////////////////////////////////////
         //                                                          //
