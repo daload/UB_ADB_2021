@@ -92,6 +92,7 @@ public class TupleModification extends Statement {
             if (ac.evaluate()) {
                 // We put the update part in the find tuple loop so if there are more tuples that
                 // pass the proposition are modified too
+                // If att_i is primary key you should replace all of this with: break;
                 for (int i=0; i < this.values.first.size(); i++) {
                     currTuple.setValue(rel.getAttributeByName(this.values.first.get(i).getAttribute()).first, values.second.get(i));
                 }
